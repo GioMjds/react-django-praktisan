@@ -13,9 +13,9 @@ def getMessages(request):
 @api_view(['GET'])
 def fetch_all_messages(request):
     try:
-        message = Message.objects.first()
+        message = Message.objects.all()
         if message:
-            serializer = MessageSerializer(message)
+            serializer = MessageSerializer(message, many=True)
             return Response(serializer.data)
         else:
             return Response({ "message": "No messages found." }, status=status.HTTP_404_NOT_FOUND)

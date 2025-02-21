@@ -2,14 +2,19 @@ import { useEffect, useState } from 'react'
 import { fetchAllMessage } from './services/axios';
 import './App.css'
 
+interface MessageData {
+  message_id: number;
+  content: string;
+}
+
 function App() {
-  const [message, setMessage] = useState<string>('');
+  const [messages, setMessages] = useState<MessageData[] |null>(null);
 
   useEffect(() => {
     const fetchMessage = async () => {
       try {
         const response = await fetchAllMessage();
-        setMessage(response.data.content);
+        setMessages(response.data);
       } catch (error) {
         console.error(`Error: ${error}`);
       }
@@ -18,12 +23,13 @@ function App() {
   }, []);
 
   return (
-    <>
-      <div>
-        {message}
-      </div>
-      <h1 className='text-5xl font-bold underline'>{message}</h1>
-    </>
+    <ul>
+      {messages?.map((message) => (
+        <li key={message.message_id}>
+          <h1 className='text-2xl'>{message.message_id}. {message.content}</h1>
+        </li>
+      ))}
+    </ul>
   )
 }
 

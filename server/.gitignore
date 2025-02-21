@@ -1,4 +1,5 @@
 .venv
 .env
 requirements.txt
-praktisan/*__pycache__/
+praktisan/praktisan/__pycache__
+praktisan/users/__pycache__
