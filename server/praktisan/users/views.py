@@ -1,26 +1,15 @@
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from .serializers import MessageSerializer
-from .models import Message
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from .serializers import NoteSerializer
+from .models import Note
+from django.contrib.auth.models import User
 
 @api_view(['GET'])
-def getMessages(request):
-    message = 'Hello, Django!'
-    return Response({ "message": message }, status=status.HTTP_200_OK)
-
-# Fetch all messages from the database
-@api_view(['GET'])
-def fetch_all_messages(request):
-    try:
-        message = Message.objects.all()
-        if message:
-            serializer = MessageSerializer(message, many=True)
-            return Response(serializer.data)
-        else:
-            return Response({ "message": "No messages found." }, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({
-            "error": "Failed to fetch all message from database",
-            "details": str(e),
-        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+@permission_classes([IsAuthenticated])
+def get_notes(request):
+    user = request.user
+    notes = Note.objects.filter(owner=user)
+    serializer = NoteSerializer(notes, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

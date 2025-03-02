@@ -31,3 +31,17 @@ export const fetchAllMessage = async () => {
         throw error;
     }
 };
+
+export const loginAsAdmin = async () => {
+    try {
+        const response = await API.post('/api/admin/login', {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        console.error(`Error logging in as admin: ${error}`);
+        throw error;
+    }
+}

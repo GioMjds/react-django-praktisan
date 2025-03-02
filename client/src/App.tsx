@@ -8,7 +8,7 @@ interface MessageData {
 }
 
 function App() {
-  const [messages, setMessages] = useState<MessageData[] |null>(null);
+  const [messages, setMessages] = useState<MessageData[]>([]);
 
   useEffect(() => {
     const fetchMessage = async () => {
